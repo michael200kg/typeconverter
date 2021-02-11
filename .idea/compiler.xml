@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="1.8">
+      <module name="testingJava" target="1.8" />
+      <module name="testingJava.main" target="1.8" />
+      <module name="testingJava.src.main.java.typeconverter" target="1.8" />
+      <module name="testingJava.src.main.java.typeconverter.main" target="1.8" />
+      <module name="testingJava.src.main.java.typeconverter.test" target="1.8" />
+      <module name="testingJava.test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

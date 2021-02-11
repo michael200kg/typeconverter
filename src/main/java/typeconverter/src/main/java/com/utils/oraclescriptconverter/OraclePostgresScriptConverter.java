@@ -1,5 +1,6 @@
 package com.utils.oraclescriptconverter;
 
+import com.utils.oraclescriptconverter.configuration.Configuration;
 import com.utils.oraclescriptconverter.model.TableConfig;
 
 import java.util.Objects;

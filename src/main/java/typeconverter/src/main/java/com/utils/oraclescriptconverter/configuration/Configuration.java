@@ -1,4 +1,4 @@
-package com.utils.oraclescriptconverter;
+package com.utils.oraclescriptconverter.configuration;
 
 import com.utils.oraclescriptconverter.model.TableConfig;
 
@@ -26,30 +26,29 @@ public class Configuration {
             fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
             String line;
-            boolean insideBooleanSection = false;
-            boolean insideExcludeSection = false;
+            ConfigState currentState = new ConfigState(false, false);
             while ((line = br.readLine()) != null) {
-                if(line.toUpperCase().contains(BEGIN_BOOLEAN_TAG)) {
-                    insideBooleanSection = true;
-                    insideExcludeSection = false;
+                if (line.toUpperCase().contains(BEGIN_BOOLEAN_TAG)) {
+                    currentState.setInsideBooleanSection(true);
+                    currentState.setInsideExcludeSection(false);
                     line = br.readLine();
                 } else if (line.toUpperCase().contains(END_BOOLEAN_TAG)) {
-                    insideBooleanSection = false;
-                    insideExcludeSection = false;
+                    currentState.setInsideBooleanSection(false);
+                    currentState.setInsideExcludeSection(false);
                 } else if (line.toUpperCase().contains(BEGIN_EXCLUDE_TAG)) {
-                    insideBooleanSection = false;
-                    insideExcludeSection = true;
+                    currentState.setInsideBooleanSection(false);
+                    currentState.setInsideExcludeSection(true);
                     line = br.readLine();
                 } else if (line.toUpperCase().contains(END_EXCLUDE_TAG)) {
-                    insideBooleanSection = false;
-                    insideExcludeSection = false;
+                    currentState.setInsideBooleanSection(false);
+                    currentState.setInsideExcludeSection(false);
                 }
-                if(insideBooleanSection) {
+                if (currentState.getInsideBooleanSection()) {
                     String tableName = line.substring(0, line.indexOf('\t')).trim().toUpperCase();
                     String fields = line.substring(line.indexOf('\t')).trim().toUpperCase();
                     config.add(new TableConfig(tableName, fields));
                 }
-                if(insideExcludeSection) {
+                if (currentState.getInsideExcludeSection()) {
                     String tableName = line.trim().toUpperCase();
                     excludedTables.add(tableName);
                 }
@@ -63,6 +62,7 @@ public class Configuration {
     public List<TableConfig> getTableConfig() {
         return config;
     }
+
     public List<String> getExcludedTables() {
         return excludedTables;
     }
