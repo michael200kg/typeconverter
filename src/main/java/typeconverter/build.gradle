@@ -20,7 +20,7 @@ jar {
     manifest {
         attributes(
                 'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-                'Main-Class': 'com.utils.typeconverter.OraclePostgresScriptConverter'
+                'Main-Class': 'com.utils.oraclescriptconverter.OraclePostgresScriptConverter'
         )
     }
 }

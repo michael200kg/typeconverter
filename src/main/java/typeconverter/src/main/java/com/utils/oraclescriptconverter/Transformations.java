@@ -11,11 +11,52 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
+import static com.utils.oraclescriptconverter.Constants.COMMENT_PREFIX;
 import static com.utils.oraclescriptconverter.Constants.END_INSERT_STATEMENT;
+import static com.utils.oraclescriptconverter.Constants.FIXED_COMMENT;
 import static com.utils.oraclescriptconverter.Constants.SEARCH_PREFIX;
 import static com.utils.oraclescriptconverter.Constants.TEMP_FILE_NAME;
 
 public class Transformations {
+
+    public static void fixComments(String sourceFileName) {
+        try {
+
+            String tempFile = sourceFileName.substring(0, sourceFileName.lastIndexOf('\\')) + "\\" + TEMP_FILE_NAME;
+            File file = new File(tempFile);
+            if (!file.exists()) {
+                file = new File(sourceFileName);
+            }
+            FileInputStream fis = new FileInputStream(file);
+            InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            BufferedReader br = new BufferedReader(isr);
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                if (line.contains(COMMENT_PREFIX)) {
+                    line = line.replace(COMMENT_PREFIX,FIXED_COMMENT);
+                }
+                sb.append(line).append("\n");
+            }
+            br.close();
+            isr.close();
+            fis.close();
+
+            System.out.println("Comments fixed!");
+
+            Writer writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(tempFile), StandardCharsets.UTF_8));
+            writer.write(sb.toString());
+            writer.close();
+
+        } catch (IOException e) {
+            System.out.println("Converter error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
 
     public static void excludeUnnecessaryTable(String sourceFileName, String tableName) {
         try {

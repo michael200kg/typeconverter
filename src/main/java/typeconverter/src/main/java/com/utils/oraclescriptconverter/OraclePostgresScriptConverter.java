@@ -12,6 +12,7 @@ public class OraclePostgresScriptConverter {
         if (Objects.nonNull(args) &&
                 args.length == 2) {
             Configuration configuration = new Configuration(args[0]);
+            Transformations.fixComments(args[1]);
             for (String excludeTable : configuration.getExcludedTables()) {
                 Transformations.excludeUnnecessaryTable(args[1], excludeTable);
                 System.out.printf("Table %s excluded!%n", excludeTable);
